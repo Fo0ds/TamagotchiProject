@@ -6,6 +6,23 @@ window = Tk()
 window.geometry("420x420")
 window.title("Da Window")
 
+#info window
+infoWindow = Toplevel(window)
+infoWindow.geometry("420x210")
+infoWindow.title("Info")
+infoWindow.withdraw()
+
+infoVisible = False
+#toggle info
+def toggleInfo():
+    global infoVisible
+    if infoVisible:
+        infoWindow.withdraw()
+        info_visible = False
+    else:
+        infoWindow.deiconify() #show
+        info_visible = True
+
 #button test
 def press():
     print("test")
@@ -13,8 +30,12 @@ def press():
     #appear in window
     label = Label(window, text = "test window")
     label.pack()
+
 button = Button(window, text = "Press Me", command = press)
-button.pack(pady = 20) #place widget ot window
+button.pack(pady = 20) #place test widget ot window
+
+InfoButton = Button(window, text = "Info", command = toggleInfo)
+InfoButton.pack(pady = 20)
 
 window.mainloop() #display window (also listen to event?)
 
