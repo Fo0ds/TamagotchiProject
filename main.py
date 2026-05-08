@@ -6,7 +6,7 @@ import sys
 
 # main window
 window = Tk()
-window.geometry("420x420")
+window.geometry("300x600")
 window.title("Tamagotchi Pet")
 
 # Info Window Testing
@@ -68,6 +68,16 @@ def play():
     label.pack()
 play_button = Button(window, text = "Play", command = play)
 play_button.pack(pady = 20)
+
+# Train Button
+def train():
+    label = Label(window, text = "You worked on training your pet!")
+    global discipline, happiness
+    discipline = discipline + 5
+    happiness = happiness - 5
+    label.pack()
+train_button = Button(window, text = "Train", command = train)
+train_button.pack(pady = 20)
 
 # Exit Button
 def exit_program():
