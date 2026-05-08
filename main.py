@@ -1,51 +1,95 @@
-#GUI test
 from tkinter import *
+from tkinter import simpledialog
+from info import name, age, discipline, hunger, health, happiness
+import time
+import sys
 
 # main window
 window = Tk()
-window.geometry("420x420")
-window.title("Da Window")
+window.geometry("300x600")
+window.title("Tamagotchi Pet")
 
-#info window
-infoWindow = Toplevel(window)
-infoWindow.geometry("420x210")
-infoWindow.title("Info")
-infoWindow.withdraw()
+# Info Window Testing
+def show_info():
+    info_window = Toplevel(window)
+    info_window.geometry("300x150")
+    info_window.title("Pet Info")
 
-infoVisible = False
-#toggle info
-def toggleInfo():
-    global infoVisible
-    if infoVisible:
-        infoWindow.withdraw()
-        info_visible = False
-    else:
-        infoWindow.deiconify() #show
-        info_visible = True
+    # Show all stats:
+    name_label = Label(info_window, text=f"Name: {name}")
+    name_label.pack()
 
-#button test
-def press():
-    print("test")
+    age_label = Label(info_window, text=f"Age: {age}")
+    age_label.pack()
 
-    #appear in window
-    label = Label(window, text = "test window")
+    discipline_label = Label(info_window, text=f"Discipline: {discipline}")
+    discipline_label.pack()
+
+    hunger_label = Label(info_window, text=f"Hunger: {hunger}")
+    hunger_label.pack()
+
+    health_label = Label(info_window, text=f"Health: {health}")
+    health_label.pack()
+
+    happiness_label = Label(info_window, text=f"Happiness: {happiness}")
+    happiness_label.pack()
+
+# Button to show info
+info_button = Button(window, text="Show Info", command=show_info)
+info_button.pack(pady=20)
+
+# Adding the different ways to interact with your pet:
+# Rename Button
+def rename():
+    user_input = simpledialog.askstring("Input", "What would you like to name your pet?")
+    global name
+    name = user_input
+    label = Label(window, text = "You renamed your pet!")
     label.pack()
+rename_button = Button(window, text = "Rename", command = rename)
+rename_button.pack(pady = 20)
 
-button = Button(window, text = "Press Me", command = press)
-button.pack(pady = 20) #place test widget ot window
+# Feed Button
+def feed():
+    label = Label(window, text = "You fed your pet!")
+    global hunger, happiness
+    hunger = hunger + 5
+    happiness = happiness + 5
+    label.pack()
+feed_button = Button(window, text = "Feed", command = feed)
+feed_button.pack(pady = 20)
 
-InfoButton = Button(window, text = "Info", command = toggleInfo)
-InfoButton.pack(pady = 20)
+# Play Button
+def play():
+    label = Label(window, text = "You played with your pet!")
+    global hunger, happiness
+    hunger = hunger - 10
+    happiness = happiness + 5
+    label.pack()
+play_button = Button(window, text = "Play", command = play)
+play_button.pack(pady = 20)
 
-window.mainloop() #display window (also listen to event?)
+# Train Button
+def train():
+    label = Label(window, text = "You worked on training your pet!")
+    global discipline, happiness
+    discipline = discipline + 5
+    happiness = happiness - 5
+    label.pack()
+train_button = Button(window, text = "Train", command = train)
+train_button.pack(pady = 20)
+
+# Exit Button
+def exit_program():
+    sys.exit(0)
+exit_button = Button(window, text = "Exit", command = exit_program)
+exit_button.pack(pady = 20)
+
+window.mainloop() #display window
 
 
-
-
+# Temporarily Commented out to test GUI
 '''
-    Test to make sure it works.
-'''
-
 from info import name, age, hunger
 
 print("Welcome!")
@@ -77,3 +121,4 @@ while True:
     else:
         print("Invalid choice. Please try again.")
 
+'''
