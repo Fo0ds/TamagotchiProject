@@ -3,7 +3,7 @@
 '''
 
 # These lines define the default values:
-name = ""
+name = "Not Set"
 age = 1
 discipline = 50
 hunger = 50
