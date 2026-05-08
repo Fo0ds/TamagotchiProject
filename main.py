@@ -1,3 +1,26 @@
+#GUI test
+from tkinter import *
+
+# main window
+window = Tk()
+window.geometry("420x420")
+window.title("Da Window")
+
+#button test
+def press():
+    print("test")
+
+    #appear in window
+    label = Label(window, text = "test window")
+    label.pack()
+button = Button(window, text = "Press Me", command = press)
+button.pack(pady = 20) #place widget ot window
+
+window.mainloop() #display window (also listen to event?)
+
+
+
+
 '''
     Test to make sure it works.
 '''
@@ -32,3 +55,4 @@ while True:
         break
     else:
         print("Invalid choice. Please try again.")
+
