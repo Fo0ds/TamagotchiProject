@@ -1,13 +1,11 @@
 from tkinter import *
 from tkinter import simpledialog
 import sys
-
 import json #for data storing
 
 def load_stats():
     with open("info.json", "r") as f:
         return json.load(f)
-
 def save_stats():
     data = {
         "name": name,
@@ -19,7 +17,6 @@ def save_stats():
     }
     with open("info.json", "w") as f:
         json.dump(data, f, indent = 4)
-
 stats = load_stats()
 name = stats["name"]
 age = stats["age"]
@@ -28,9 +25,6 @@ hunger = stats["hunger"]
 health = stats["health"]
 happiness = stats["happiness"]
 
-#want a live update of stat in info no clue how (yet)
-
-
 # main window
 window = Tk()
 window.geometry("320x320")
@@ -38,7 +32,6 @@ window.resizable(False, False)
 window.title("Tamagotchi Pet")
 
 info_labels = {}
-# Info Window Testing
 def show_info():
     info_window = Toplevel(window)
     info_window.geometry("175x150")
@@ -68,7 +61,6 @@ def show_info():
     info_labels["happiness"].pack()
 
     update_info_window()
-
 def update_info_window():
     if info_labels:
         info_labels["name"].config(text=f"Name: {name}")
@@ -79,7 +71,6 @@ def update_info_window():
         info_labels["happiness"].config(text=f"Happiness: {happiness}")
 
         window.after(300, update_info_window)
-
 info_button = Button(window, text="Info", command=show_info)
 info_button.place(x=270, y=20)
 
@@ -132,6 +123,7 @@ def train():
 train_button = Button(window, text = "Train", command = train)
 train_button.place(x=220, y=270)
 
+#Exit button
 '''
 I think that there's no point in it right now since we could use the x
 # Exit Button
@@ -163,6 +155,16 @@ def age_up():
     window.after(60000, age_up) #run again in 60 seconds (from tkinter)
 age_up()
 
+#Death
+def starve(): #starvation mechanic
+    global health, hunger
+    if hunger <= 0:
+        health -=10
+        save_stats()
+        window.after(10000, starve)
+#start checking for starvation
+starve()
+    
 
 window.mainloop() #display window
 
