@@ -155,16 +155,52 @@ def age_up():
     window.after(60000, age_up) #run again in 60 seconds (from tkinter)
 age_up()
 
-#Death
-def starve(): #starvation mechanic
-    global health, hunger
+#Check health
+def death():
+    if health <= 0:
+        #stop current damage
+        if starve_id is not None:
+            window.after_cancel(starve_id)
+        #open death window
+        death_window = Toplevel(window)
+        death_window.geometry("180x80")
+        death_window.title("Death Screen")
+        death_window.resizable("False", "False")
+        Label(death_window, text="Your pet has died.").pack()
+
+        def reset_from_death():
+            reset_stats()
+            death_window.destroy()          # reset stats
+            starve()             # restart starvation loop
+
+        Button(death_window, text="Reset Pet", command=reset_from_death).pack(pady=20)
+
+
+#Starving 
+starve_time = 0
+starve_id = None
+def starve():
+    global health, hunger, starve_time, starve_id
     if hunger <= 0:
-        health -=10
+        starve_time += 1
+        damage = 1 + (starve_time // 5) + (-hunger // 5)
+
+        health -= damage
         save_stats()
-        window.after(10000, starve)
+
+        label = Label(window, text=f"Your pet is starving!!! (-{damage} HP)")
+        label.pack()
+        label.after(1500, label.destroy)
+        death()
+
+    else:
+        starve_time = 0
+
+    if health > 0:
+        starve_id = window.after(3000, starve)
 #start checking for starvation
 starve()
-    
+
 
 window.mainloop() #display window
 
