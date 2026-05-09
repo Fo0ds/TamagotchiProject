@@ -25,6 +25,9 @@ hunger = stats["hunger"]
 health = stats["health"]
 happiness = stats["happiness"]
 
+def stop_overloading(value, low = 0 , high = 100):
+    return max(low, min(high, value))
+
 # main window
 window = Tk()
 window.geometry("320x320")
@@ -90,11 +93,31 @@ rename_button.place(x=80, y=20)
 # Feed Button
 def feed():
     label = Label(window, text = "You fed your pet!")
-    global hunger, happiness
-    hunger = hunger + 5
-    happiness = happiness + 5
-    save_stats()
+    global hunger, happiness, health
+    if health <= 0:
+        return
+    
+    label = Label(window, text = "")
     label.pack()
+
+    if hunger <= 0:
+        hunger += 20
+        happiness += 5
+    else:
+        hunger += 10
+        happiness += 3
+    
+    if hunger > 100:
+        health -= 5
+        label.config(text= "You are overfeeding your pet!!!")
+    
+    hunger = stop_overloading(hunger)
+    happiness = stop_overloading(happiness)
+    health = stop_overloading(health)
+
+    save_stats()
+    death()
+
     label.after(1500, label.destroy) #renmove text (label) after 2 secs
 feed_button = Button(window, text = "Feed", command = feed)
 feed_button.place(x=60, y=270)
@@ -102,10 +125,29 @@ feed_button.place(x=60, y=270)
 # Play Button
 def play():
     label = Label(window, text = "You played with your pet!")
-    global hunger, happiness
-    hunger = hunger - 10
-    happiness = happiness + 5
+    global hunger, happiness, health
+
+    if health <= 0:
+        return
+    
+    label = Label(window, text="")
+    label.pack()
+
+    if hunger < 10:
+        label.config(text="Your pet is too hungry to play.")
+        label.after(1500, label.destroy)
+        return
+    
+    hunger -= 8
+    happiness += 10
+
+    hunger = stop_overloading(hunger)
+    happiness = stop_overloading(happiness)
+    health = stop_overloading(health)
+
     save_stats()
+    death()
+
     label.pack()
     label.after(1500, label.destroy) #renmove text (label) after 2 secs
 play_button = Button(window, text = "Play", command = play)
@@ -114,10 +156,31 @@ play_button.place(x=140, y=270)
 # Train Button
 def train():
     label = Label(window, text = "You worked on training your pet!")
-    global discipline, happiness
-    discipline = discipline + 5
-    happiness = happiness - 5
+    global discipline, happiness, health, hunger
+
+    if health <= 0:
+        return
+
+    label = Label(window, text="")
+    label.pack()
+
+    if happiness < 10:
+        label.config(text="Your pet is too sad to train.")
+        label.after(1500, label.destroy)
+        return
+
+    hunger -= 5
+    discipline = discipline + 6
+    happiness = happiness - 8
+
+    hunger = stop_overloading(hunger)
+    happiness = stop_overloading(happiness)
+    discipline = stop_overloading(discipline)
+    health = stop_overloading(health)
+
     save_stats()
+    death()
+    
     label.pack()
     label.after(1500, label.destroy) #renmove text (label) after 2 secs
 train_button = Button(window, text = "Train", command = train)
@@ -174,7 +237,6 @@ def death():
             starve()             # restart starvation loop
 
         Button(death_window, text="Reset Pet", command=reset_from_death).pack(pady=20)
-
 
 #Starving 
 starve_time = 0
