@@ -37,6 +37,7 @@ window.geometry("320x320")
 window.resizable(False, False)
 window.title("Tamagotchi Pet")
 
+info_labels = {}
 # Info Window Testing
 def show_info():
     info_window = Toplevel(window)
@@ -44,24 +45,41 @@ def show_info():
     info_window.title("Pet Info")
     info_window.resizable("False", "False")
 
+    global info_labels # allow for live update of variable in info panel
+    info_labels = {}
+
     # Show all stats:
-    name_label = Label(info_window, text=f"Name: {name}")
-    name_label.pack()
+    info_labels["name"] = Label(info_window, text=f"Name: {name}")
+    info_labels["name"].pack()
 
-    age_label = Label(info_window, text=f"Age: {age}")
-    age_label.pack()
+    info_labels["age"] = Label(info_window, text=f"Age: {age}")
+    info_labels["age"].pack()
 
-    discipline_label = Label(info_window, text=f"Discipline: {discipline}")
-    discipline_label.pack()
+    info_labels["discipline"] = Label(info_window, text=f"Discipline: {discipline}")
+    info_labels["discipline"].pack()
 
-    hunger_label = Label(info_window, text=f"Hunger: {hunger}")
-    hunger_label.pack()
+    info_labels["hunger"] = Label(info_window, text=f"Hunger: {hunger}")
+    info_labels["hunger"].pack()
 
-    health_label = Label(info_window, text=f"Health: {health}")
-    health_label.pack()
+    info_labels["health"] = Label(info_window, text=f"Health: {health}")
+    info_labels["health"].pack()
 
-    happiness_label = Label(info_window, text=f"Happiness: {happiness}")
-    happiness_label.pack()
+    info_labels["happiness"] = Label(info_window, text=f"Happiness: {happiness}")
+    info_labels["happiness"].pack()
+
+    update_info_window()
+
+def update_info_window():
+    if info_labels:
+        info_labels["name"].config(text=f"Name: {name}")
+        info_labels["age"].config(text=f"Age: {age}")
+        info_labels["discipline"].config(text=f"Discipline: {discipline}")
+        info_labels["hunger"].config(text=f"Hunger: {hunger}")
+        info_labels["health"].config(text=f"Health: {health}")
+        info_labels["happiness"].config(text=f"Happiness: {happiness}")
+
+        window.after(300, update_info_window)
+
 info_button = Button(window, text="Info", command=show_info)
 info_button.place(x=270, y=20)
 
@@ -141,7 +159,7 @@ reset_button.place(x=20, y=20)
 def age_up():
     global age
     age += 1
-    save_stats
+    save_stats()
     window.after(60000, age_up) #run again in 60 seconds (from tkinter)
 age_up()
 

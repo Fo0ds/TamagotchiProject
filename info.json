@@ -1,8 +1,8 @@
 {
     "name": "Pet",
-    "age": 1,
-    "discipline": 0,
-    "hunger": 50,
+    "age": 2,
+    "discipline": 30,
+    "hunger": -5,
     "health": 100,
-    "happiness": 50
+    "happiness": 70
 }
