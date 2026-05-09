@@ -1,19 +1,48 @@
 from tkinter import *
 from tkinter import simpledialog
-from info import name, age, discipline, hunger, health, happiness
-import time
 import sys
+
+import json #for data storing
+
+def load_stats():
+    with open("info.json", "r") as f:
+        return json.load(f)
+
+def save_stats():
+    data = {
+        "name": name,
+        "age": age,
+        "discipline": discipline,
+        "hunger": hunger,
+        "health": health,
+        "happiness": happiness
+    }
+    with open("info.json", "w") as f:
+        json.dump(data, f, indent = 4)
+
+stats = load_stats()
+name = stats["name"]
+age = stats["age"]
+discipline = stats["discipline"]
+hunger = stats["hunger"]
+health = stats["health"]
+happiness = stats["happiness"]
+
+#want a live update of stat in info no clue how (yet)
+
 
 # main window
 window = Tk()
-window.geometry("300x600")
+window.geometry("320x320")
+window.resizable(False, False)
 window.title("Tamagotchi Pet")
 
 # Info Window Testing
 def show_info():
     info_window = Toplevel(window)
-    info_window.geometry("300x150")
+    info_window.geometry("175x150")
     info_window.title("Pet Info")
+    info_window.resizable("False", "False")
 
     # Show all stats:
     name_label = Label(info_window, text=f"Name: {name}")
@@ -33,10 +62,8 @@ def show_info():
 
     happiness_label = Label(info_window, text=f"Happiness: {happiness}")
     happiness_label.pack()
-
-# Button to show info
-info_button = Button(window, text="Show Info", command=show_info)
-info_button.pack(pady=20)
+info_button = Button(window, text="Info", command=show_info)
+info_button.place(x=270, y=20)
 
 # Adding the different ways to interact with your pet:
 # Rename Button
@@ -44,10 +71,12 @@ def rename():
     user_input = simpledialog.askstring("Input", "What would you like to name your pet?")
     global name
     name = user_input
+    save_stats()
     label = Label(window, text = "You renamed your pet!")
     label.pack()
+    label.after(1500, label.destroy) #renmove text (label) after 1.5 secs
 rename_button = Button(window, text = "Rename", command = rename)
-rename_button.pack(pady = 20)
+rename_button.place(x=80, y=20)
 
 # Feed Button
 def feed():
@@ -55,9 +84,11 @@ def feed():
     global hunger, happiness
     hunger = hunger + 5
     happiness = happiness + 5
+    save_stats()
     label.pack()
+    label.after(1500, label.destroy) #renmove text (label) after 2 secs
 feed_button = Button(window, text = "Feed", command = feed)
-feed_button.pack(pady = 20)
+feed_button.place(x=60, y=270)
 
 # Play Button
 def play():
@@ -65,9 +96,11 @@ def play():
     global hunger, happiness
     hunger = hunger - 10
     happiness = happiness + 5
+    save_stats()
     label.pack()
+    label.after(1500, label.destroy) #renmove text (label) after 2 secs
 play_button = Button(window, text = "Play", command = play)
-play_button.pack(pady = 20)
+play_button.place(x=140, y=270)
 
 # Train Button
 def train():
@@ -75,15 +108,43 @@ def train():
     global discipline, happiness
     discipline = discipline + 5
     happiness = happiness - 5
+    save_stats()
     label.pack()
+    label.after(1500, label.destroy) #renmove text (label) after 2 secs
 train_button = Button(window, text = "Train", command = train)
-train_button.pack(pady = 20)
+train_button.place(x=220, y=270)
 
+'''
+I think that there's no point in it right now since we could use the x
 # Exit Button
 def exit_program():
     sys.exit(0)
 exit_button = Button(window, text = "Exit", command = exit_program)
-exit_button.pack(pady = 20)
+exit_button.place(x=200, y=270)
+'''
+
+#reset stats button
+def reset_stats():
+    global name, age, discipline, hunger, health, happiness
+    name = "Pet"
+    age = 1
+    discipline = 0
+    hunger = 50
+    health = 100
+    happiness = 50
+    save_stats()
+reset_button = Button(window, text = "RESET", command = reset_stats)
+reset_button.place(x=20, y=20)
+
+
+#aging
+def age_up():
+    global age
+    age += 1
+    save_stats
+    window.after(60000, age_up) #run again in 60 seconds (from tkinter)
+age_up()
+
 
 window.mainloop() #display window
 

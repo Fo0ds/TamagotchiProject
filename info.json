@@ -1,0 +1,8 @@
+{
+    "name": "Pet",
+    "age": 1,
+    "discipline": 0,
+    "hunger": 50,
+    "health": 100,
+    "happiness": 50
+}
