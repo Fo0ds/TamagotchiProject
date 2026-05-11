@@ -3,6 +3,8 @@ from tkinter import simpledialog
 import sys
 import json #for data storing
 
+from testing import remind_user
+
 def load_stats():
     with open("info.json", "r") as f:
         return json.load(f)
